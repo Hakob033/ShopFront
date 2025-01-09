@@ -5,6 +5,7 @@ import "../../globals.css";
 import Eye from "../../icons/eye";
 import EyeSlash from "../../icons/eyeSlash";
 import { useRouter } from "next/navigation";
+import Link from "next/link"; // Import Link from Next.js
 
 export default function Login() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function Login() {
 
       if (response.ok) {
         document.cookie = `jwtToken=${data.token}; path=/; max-age=86400; secure; samesite=strict`;
-        router.push("/");
+        router.push("/"); // Redirect to home
       } else {
         setError(data.message || "Login failed. Check your credentials.");
       }
@@ -103,6 +104,19 @@ export default function Login() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        {/* Link to Register Page */}
+        <div className="mt-4 text-center">
+          <p>
+            Don't have an account?{" "}
+            <Link
+              href="/pages/register"
+              className="text-blue-500 hover:underline"
+            >
+              Register here
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

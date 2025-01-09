@@ -1,8 +1,8 @@
 import { create } from "zustand";
-import { AuthState, User } from "@/app/api/types/auth";
+import { AuthState, User } from "../../types/authTypes";
 import Cookies from "js-cookie";
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const ProductStore = create<AuthState>((set) => ({
   user: null,
   token: null,
   isAuthenticated: false,

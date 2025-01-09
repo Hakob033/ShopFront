@@ -6,6 +6,7 @@ import Eye from "../../icons/eye";
 import EyeSlash from "../../icons/eyeSlash";
 import { useRouter } from "next/navigation";
 import Loading from "../../../components/loading";
+import Link from "next/link"; // Import Link from Next.js
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,14 +29,16 @@ export default function Register() {
     const jwtToken = localStorage.getItem("jwtToken");
 
     if (jwtToken) {
-      router.push("/");
+      router.push("/"); // Redirect to home if already logged in
     } else {
       setIsLoggedIn(true);
     }
   }, [router]);
+
   if (isLoggedIn === null) {
     return <Loading />;
   }
+
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     nextField?: any
@@ -97,7 +100,7 @@ export default function Register() {
               type="text"
               id="name"
               className="w-full px-4 py-2 mt-1 text-gray-700 border border-dark rounded-xl outline-none"
-              placeholder="name"
+              placeholder="Name"
               value={name}
               onChange={(e) => setname(e.target.value)}
             />
@@ -149,6 +152,15 @@ export default function Register() {
             Register
           </button>
         </form>
+
+        <div className="mt-4 text-center">
+          <p className="text-sm text-gray-600">
+            Already have an account?{" "}
+            <Link href="/pages/login" className="text-medium hover:underline">
+              Login here
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
