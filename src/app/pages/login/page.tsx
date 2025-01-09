@@ -5,10 +5,12 @@ import "../../globals.css";
 import Eye from "../../icons/eye";
 import EyeSlash from "../../icons/eyeSlash";
 import { useRouter } from "next/navigation";
-import Link from "next/link"; // Import Link from Next.js
+import Link from "next/link";
+import { AuthStore } from "../../store/authStore"; // Import your store
 
 export default function Login() {
   const router = useRouter();
+  const { login } = AuthStore(); // Access login function from your store
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -30,22 +32,11 @@ export default function Login() {
 
     setLoading(true); // Start loading state
     try {
-      const response = await fetch("http://localhost:3001/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, password }),
-      });
+      // Use the store's login method, which already includes the API call
+      await login(name, password);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        document.cookie = `jwtToken=${data.token}; path=/; max-age=86400; secure; samesite=strict`;
-        router.push("/"); // Redirect to home
-      } else {
-        setError(data.message || "Login failed. Check your credentials.");
-      }
+      // Redirect to home page after successful login
+      router.push("/");
     } catch (err) {
       setError("Login failed. Please try again.");
     } finally {

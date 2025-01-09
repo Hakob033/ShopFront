@@ -1,56 +1,57 @@
+// app/store/productStore.ts
 import { create } from "zustand";
-import { AuthState, User } from "../../types/authTypes";
-import Cookies from "js-cookie";
+import { Product } from "../../types/productTypes";
 
-export const ProductStore = create<AuthState>((set) => ({
-  user: null,
-  token: null,
-  isAuthenticated: false,
+interface ProductStoreState {
+  products: Product[]; // State for storing products
+  loading: boolean; // Loading state
+  error: string | null; // Error state
+  page: number; // Current page
+  totalPages: number; // Total number of pages
+  pageSize: number; // Number of products per page
+  setProducts: (products: Product[]) => void; // Action to set products
+  setPagination: (page: number, totalPages: number) => void; // Set pagination info
+  fetchProducts: (page: number) => Promise<void>; // Fetch products based on page
+}
 
-  login: async (name: string, password: string) => {
+export const ProductStore = create<ProductStoreState>((set) => ({
+  products: [],
+  loading: false,
+  error: null,
+  page: 1, // Default page
+  totalPages: 1, // Default total pages
+  pageSize: 6, // Products per page
+
+  // Action to set products
+  setProducts: (products: Product[]) => set({ products }),
+
+  // Action to set pagination info
+  setPagination: (page: number, totalPages: number) =>
+    set({ page, totalPages }),
+
+  // Action to fetch products from API based on the page
+  fetchProducts: async (page: number) => {
+    set({ loading: true, error: null }); // Start loading
     try {
-      const res = await fetch("http://localhost:3001/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, password }), // Sending the login request
-      });
+      const res = await fetch(
+        `http://localhost:3001/api/products?page=${page}&pageSize=6`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       if (res.ok) {
-        const { token, user }: { token: string; user: User } = await res.json();
-        console.log(user);
-
-        Cookies.set("authToken", token); // Save token in cookies
-
-        set({
-          user,
-          token,
-          isAuthenticated: true,
-        });
+        const data = await res.json();
+        set({ products: data.products, totalPages: data.totalPages });
       } else {
-        throw new Error("Login failed");
+        throw new Error("Failed to fetch products");
       }
     } catch (error) {
-      console.error("Login error:", error);
-      throw error; // Rethrow error to handle in UI (for example: showing an alert or message)
-    }
-  },
-
-  logout: () => {
-    Cookies.remove("authToken"); // Clear token from cookies
-    set({
-      user: null,
-      token: null,
-      isAuthenticated: false,
-    });
-  },
-
-  restoreSession: () => {
-    const token = Cookies.get("authToken");
-    if (token) {
-      set({
-        token,
-        isAuthenticated: true,
-      });
+      console.error("Error fetching products:", error);
+      set({ error: error.message || "An error occurred" });
+    } finally {
+      set({ loading: false }); // Stop loading
     }
   },
 }));
