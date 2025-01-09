@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../../globals.css";
 import Eye from "@/app/icons/eye";
 import EyeSlash from "@/app/icons/eyeSlash";
 import { useRouter } from "next/navigation";
+import Loading from "@/components/loading";
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,12 +19,23 @@ export default function Register() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () =>
     setConfirmPassword(!confirmPassword);
+  useEffect(() => {
+    const jwtToken = localStorage.getItem("jwtToken");
 
-  // Handle key press to move focus to next field or submit form
+    if (jwtToken) {
+      router.push("/");
+    } else {
+      setIsLoggedIn(true);
+    }
+  }, [router]);
+  if (isLoggedIn === null) {
+    return <Loading />;
+  }
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     nextField?: any
@@ -48,7 +60,6 @@ export default function Register() {
       };
 
       try {
-        console.log("Sending data:", userData);
         const response = await fetch("http://localhost:3001/auth/register", {
           method: "POST",
           headers: {

@@ -4,17 +4,15 @@ import React, { useState } from "react";
 import "@/app/globals.css";
 import Eye from "@/app/icons/eye";
 import EyeSlash from "@/app/icons/eyeSlash";
-import { useAuthStore } from "@/app/store/productStore";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useAuthStore();
-  const [name, setName] = useState<string>(""); // Changed from email to name
+  const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -31,10 +29,24 @@ export default function Login() {
 
     setLoading(true); // Start loading state
     try {
-      await login(name, password);
-      router.push("/");
+      const response = await fetch("http://localhost:3001/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        document.cookie = `jwtToken=${data.token}; path=/; max-age=86400; secure; samesite=strict`;
+        router.push("/");
+      } else {
+        setError(data.message || "Login failed. Check your credentials.");
+      }
     } catch (err) {
-      setError("Login failed. Check your credentials and try again.");
+      setError("Login failed. Please try again.");
     } finally {
       setLoading(false); // Stop loading state
     }
