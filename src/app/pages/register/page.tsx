@@ -2,10 +2,10 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import "../../globals.css";
-import Eye from "@/app/icons/eye";
-import EyeSlash from "@/app/icons/eyeSlash";
+import Eye from "../../icons/eye";
+import EyeSlash from "../../icons/eyeSlash";
 import { useRouter } from "next/navigation";
-import Loading from "@/components/loading";
+import Loading from "../../../components/loading";
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -76,7 +76,7 @@ export default function Register() {
 
         const data = await response.json();
         console.log("Registration successful:", data);
-        router.push("/api/login");
+        router.push("/api/auth/login");
       } catch (error) {
         console.error("Error during registration:", error);
       }

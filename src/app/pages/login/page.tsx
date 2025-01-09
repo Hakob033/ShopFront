@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import "@/app/globals.css";
-import Eye from "@/app/icons/eye";
-import EyeSlash from "@/app/icons/eyeSlash";
+import "../../globals.css";
+import Eye from "../../icons/eye";
+import EyeSlash from "../../icons/eyeSlash";
 import { useRouter } from "next/navigation";
 
 export default function Login() {

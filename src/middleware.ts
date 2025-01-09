@@ -1,21 +1,23 @@
-// middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-  // Get the JWT token from cookies
   const token = req.cookies.get("jwtToken")?.value;
 
-  // Define protected routes
-  const protectedRoutes = ["/", "/home", "/dashboard"]; // Specify the protected pages
+  const protectedRoutes = ["/", "/home", "/dashboard"];
+  const authPages = ["/pages/login", "/pages/register"];
+
   const currentPath = req.nextUrl.pathname;
 
-  // If accessing a protected route without a token, redirect to login
   if (protectedRoutes.includes(currentPath) && !token) {
-    const loginUrl = new URL("/api/login", req.url); // Redirect to login page
+    const loginUrl = new URL("/pages/login", req.url);
     return NextResponse.redirect(loginUrl);
   }
 
-  // Allow request to proceed if not protected
+  if (authPages.includes(currentPath) && token) {
+    const homeUrl = new URL("/", req.url);
+    return NextResponse.redirect(homeUrl);
+  }
+
   return NextResponse.next();
 }
