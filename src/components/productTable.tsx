@@ -1,4 +1,3 @@
-// components/ProductTable.tsx
 import { Poppins } from "next/font/google";
 import Info from "../app/icons/info";
 import Edit from "../app/icons/edit";
@@ -28,7 +27,40 @@ const ProductTable = () => {
   }, [fetchProducts, page]);
 
   const handlePageChange = (newPage: number) => {
-    setPagination(newPage, totalPages); // Update pagination state
+    if (newPage >= 1 && newPage <= totalPages) {
+      setPagination(newPage, totalPages); // Update pagination state
+    }
+  };
+
+  // Generate pagination numbers
+  const generatePagination = () => {
+    const pages = [];
+    if (totalPages <= 5) {
+      // If total pages are less than or equal to 5, show all pages
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Always include first, last, and current with neighbors
+      pages.push(1);
+      if (page > 2) pages.push(page - 1);
+      if (page !== 1 && page !== totalPages) pages.push(page);
+      if (page < totalPages - 1) pages.push(page + 1);
+      pages.push(totalPages);
+
+      // Remove duplicates and sort
+      pages.sort((a, b) => a - b);
+    }
+
+    // Insert "..." where needed
+    const finalPages = [];
+    for (let i = 0; i < pages.length; i++) {
+      if (i > 0 && pages[i] !== pages[i - 1] + 1) {
+        finalPages.push("...");
+      }
+      finalPages.push(pages[i]);
+    }
+    return finalPages;
   };
 
   return (
@@ -87,7 +119,7 @@ const ProductTable = () => {
               <tr key={product.id} className="border-b">
                 <td className="px-6 py-4">
                   <img
-                    src={product.image || "https://via.placeholder.com/40"}
+                    src={product.image}
                     alt={product.name}
                     className="w-10 h-10 rounded-md"
                   />
@@ -104,7 +136,7 @@ const ProductTable = () => {
                 <td className="px-6 py-4 text-sm text-gray-700">
                   ${product.price}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-700">
+                <td className="px-6 py-4 text-sm text-center text-gray-700">
                   {product.stockQuantity}
                 </td>
                 <td className="px-6 py-4">
@@ -136,23 +168,40 @@ const ProductTable = () => {
       </div>
 
       {/* Pagination controls */}
-      <div className="mt-4 flex justify-between items-center">
+      <div className="mt-4 flex justify-end items-center space-x-2">
         <button
           onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}
           className="px-4 py-2 text-white bg-blue-500 rounded-lg"
         >
-          Prev
+          &lt;
         </button>
-        <span>
-          Page {page} of {totalPages}
-        </span>
+        {generatePagination().map((p, index) =>
+          p === "..." ? (
+            <span key={index} className="px-4 py-2 text-gray-500">
+              ...
+            </span>
+          ) : (
+            <button
+              key={index}
+              onClick={() => handlePageChange(Number(p))}
+              disabled={page === p}
+              className={`px-4 py-2 rounded-lg ${
+                page === p
+                  ? "bg-blue-700 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+            >
+              {p}
+            </button>
+          )
+        )}
         <button
           onClick={() => handlePageChange(page + 1)}
           disabled={page === totalPages}
           className="px-4 py-2 text-white bg-blue-500 rounded-lg"
         >
-          Next
+          &gt;
         </button>
       </div>
     </div>
