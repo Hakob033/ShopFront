@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Poppins } from "next/font/google";
 import Info from "../app/icons/info";
 import Edit from "../app/icons/edit";
@@ -19,7 +20,11 @@ const ProductTable = () => {
     totalPages,
     fetchProducts,
     setPagination,
+    setProducts, // Add this if your store has a way to update products
   } = ProductStore();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
 
   // Fetch products when the component mounts or page changes
   useEffect(() => {
@@ -32,27 +37,62 @@ const ProductTable = () => {
     }
   };
 
-  // Generate pagination numbers
+  const handleDeleteClick = (product) => {
+    setProductToDelete(product);
+    setIsModalOpen(true); // Open modal
+  };
+
+  const confirmDelete = async () => {
+    if (productToDelete) {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/api/products/${productToDelete.id}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (response.ok) {
+          // Remove the product from the local state after successful deletion
+          setProducts(
+            products.filter((product) => product.id !== productToDelete.id)
+          );
+          setIsModalOpen(false); // Close modal
+          setProductToDelete(null); // Clear selected product
+
+          // Reload the products for the current page
+          fetchProducts(page);
+        } else {
+          const errorMessage = await response.text();
+          console.error("Failed to delete product:", errorMessage);
+        }
+      } catch (err) {
+        console.error("Error deleting product:", err);
+      }
+    }
+  };
+
+  const cancelDelete = () => {
+    setIsModalOpen(false);
+    setProductToDelete(null); // Clear selected product
+  };
+
   const generatePagination = () => {
     const pages = [];
     if (totalPages <= 5) {
-      // If total pages are less than or equal to 5, show all pages
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Always include first, last, and current with neighbors
       pages.push(1);
       if (page > 2) pages.push(page - 1);
       if (page !== 1 && page !== totalPages) pages.push(page);
       if (page < totalPages - 1) pages.push(page + 1);
       pages.push(totalPages);
 
-      // Remove duplicates and sort
       pages.sort((a, b) => a - b);
     }
 
-    // Insert "..." where needed
     const finalPages = [];
     for (let i = 0; i < pages.length; i++) {
       if (i > 0 && pages[i] !== pages[i - 1] + 1) {
@@ -65,6 +105,7 @@ const ProductTable = () => {
 
   return (
     <div>
+      {/* Table */}
       <div className="overflow-hidden border rounded-lg shadow">
         {loading && <p>Loading...</p>}
         {error && <p className="text-red-500">{error}</p>}
@@ -72,6 +113,7 @@ const ProductTable = () => {
         <table className="min-w-full bg-white">
           <thead>
             <tr className="border-b bg-gray-100">
+              {/* Table headers */}
               <th
                 className={`px-6 py-3 text-sm text-left ${font.className} text-dark`}
               >
@@ -159,7 +201,12 @@ const ProductTable = () => {
                 <td className="px-6 py-6 flex space-x-2">
                   <Info />
                   <Edit />
-                  <Delete />
+                  <button
+                    onClick={() => handleDeleteClick(product)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <Delete />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -204,6 +251,31 @@ const ProductTable = () => {
           &gt;
         </button>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-lg font-semibold">
+              Do you want to remove the product?
+            </h2>
+            <div className="mt-4 flex justify-center space-x-2">
+              <button
+                onClick={cancelDelete}
+                className="px-4 py-2 text-gray-700 bg-[#0F16170D] rounded-lg"
+              >
+                No, Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 text-white bg-[#FF115C] rounded-lg"
+              >
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
