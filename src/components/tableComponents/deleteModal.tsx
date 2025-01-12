@@ -1,17 +1,5 @@
-import React from "react";
-
-interface DeleteModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-}
-
-const DeleteModal: React.FC<DeleteModalProps> = ({
-  isOpen,
-  onClose,
-  onConfirm,
-}) => {
-  if (!isOpen) return null;
+const DeleteModal = ({ isModalOpen, confirmDelete, cancelDelete }) => {
+  if (!isModalOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -21,13 +9,13 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
         </h2>
         <div className="mt-4 flex justify-center space-x-2">
           <button
-            onClick={onClose}
+            onClick={cancelDelete}
             className="px-4 py-2 text-gray-700 bg-[#0F16170D] rounded-lg"
           >
             No, Cancel
           </button>
           <button
-            onClick={onConfirm}
+            onClick={confirmDelete}
             className="px-4 py-2 text-white bg-[#FF115C] rounded-lg"
           >
             Yes, Delete

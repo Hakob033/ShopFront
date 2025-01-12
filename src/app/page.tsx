@@ -5,7 +5,7 @@ import { Poppins } from "next/font/google";
 // import SearchBar from "./components/searchBar";
 // import StatusFilter from "./components/statusFilter";
 // import Logout from "@/icons/logout";
-import TableHeader from "../components/tableHeader";
+import TableHeader from "../components/header";
 import ProductTable from "../components/productTable";
 
 const font = Poppins({
