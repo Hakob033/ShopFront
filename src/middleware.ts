@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("jwtToken")?.value;
 
-  const protectedRoutes = ["/", "/home", "/dashboard"];
+  const protectedRoutes = ["/", "/pages/addItem"];
   const authPages = ["/pages/login", "/pages/register"];
 
   const currentPath = req.nextUrl.pathname;
