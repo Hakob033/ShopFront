@@ -26,13 +26,19 @@ const AddProduct = () => {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    const updatedValue =
+      name === "price" || name === "stockQuantity" ? Number(value) : value;
+
+    setFormData((prev) => ({ ...prev, [name]: updatedValue }));
   };
 
   const handleNext = () => setStep(2); // Go to the next step
   const handleBack = () => setStep(1); // Go back to the previous step
   const handleAdd = async () => {
     try {
+      console.log(formData);
+
       const response = await fetch("http://localhost:3001/api/products", {
         method: "POST",
         headers: {
@@ -47,8 +53,7 @@ const AddProduct = () => {
 
       const result = await response.json();
       console.log("Product added:", result);
-      // You can navigate to another page or show a success message
-      router.push("/success"); // Example redirection after adding product
+      router.push("/"); // Example redirection after adding product
     } catch (error) {
       console.error("Error adding product:", error);
     }
@@ -59,7 +64,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="min-h-screen flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl p-6">
         {/* Header */}
         <ModalHeader onClose={handleCancel} />

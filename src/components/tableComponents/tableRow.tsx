@@ -1,6 +1,7 @@
 import Info from "../../app/icons/info";
 import Edit from "../../app/icons/edit";
 import Delete from "../../app/icons/delete";
+import Link from "next/link";
 
 const TableRow = ({ product, handleDeleteClick }) => (
   <tr className="border-b">
@@ -36,7 +37,10 @@ const TableRow = ({ product, handleDeleteClick }) => (
       </span>
     </td>
     <td className="px-6 py-6 flex space-x-2">
-      <Info />
+      <Link href={`/pages/${product.id}`}>
+        <Info />
+      </Link>
+
       <Edit />
       <button
         onClick={() => handleDeleteClick(product)}

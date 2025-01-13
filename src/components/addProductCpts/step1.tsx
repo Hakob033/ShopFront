@@ -1,5 +1,5 @@
 import React from "react";
-import ImageUpload from "./imgaeUpload";
+import ImageUpload from "./imageUpload";
 
 interface Step1Props {
   formData: {
@@ -26,7 +26,7 @@ const Step1: React.FC<Step1Props> = ({
   onCancel,
 }) => {
   const handleImageUpload = (imageUrl: string) => {
-    // Directly update formData without relying on onChange
+    // Update formData with the uploaded image URL
     onChange({
       target: { name: "imageUrl", value: imageUrl },
     } as React.ChangeEvent<HTMLInputElement>);
@@ -35,6 +35,7 @@ const Step1: React.FC<Step1Props> = ({
   return (
     <div>
       <div className="grid grid-cols-2 gap-6">
+        {/* Image Upload Component */}
         <ImageUpload onImageUpload={handleImageUpload} />
 
         <div className="space-y-4">

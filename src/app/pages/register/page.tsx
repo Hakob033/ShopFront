@@ -79,7 +79,7 @@ export default function Register() {
 
         const data = await response.json();
         console.log("Registration successful:", data);
-        router.push("/api/auth/login");
+        router.push("/pages/login");
       } catch (error) {
         console.error("Error during registration:", error);
       }

@@ -1,11 +1,11 @@
 // types/index.ts
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   sku: string;
   category: string;
   price: number;
   stockQuantity: number;
-  status: string;
+  description: string;
   image: string;
 }

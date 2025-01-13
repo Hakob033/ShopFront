@@ -12,15 +12,16 @@ interface ProductStoreState {
   setProducts: (products: Product[]) => void; // Action to set products
   setPagination: (page: number, totalPages: number) => void; // Set pagination info
   fetchProducts: (page: number) => Promise<void>; // Fetch products based on page
+  deleteProduct: (productId: string) => Promise<void>; // Delete product
 }
 
 export const ProductStore = create<ProductStoreState>((set) => ({
   products: [],
   loading: false,
   error: null,
-  page: 1, // Default page
-  totalPages: 1, // Default total pages
-  pageSize: 6, // Products per page
+  page: 1,
+  totalPages: 1,
+  pageSize: 6,
 
   // Action to set products
   setProducts: (products: Product[]) => set({ products }),
@@ -31,7 +32,7 @@ export const ProductStore = create<ProductStoreState>((set) => ({
 
   // Action to fetch products from API based on the page
   fetchProducts: async (page: number) => {
-    set({ loading: true, error: null }); // Start loading
+    set({ loading: true, error: null });
     try {
       const res = await fetch(
         `http://localhost:3001/api/products?page=${page}&pageSize=6`,
@@ -51,7 +52,31 @@ export const ProductStore = create<ProductStoreState>((set) => ({
       console.error("Error fetching products:", error);
       set({ error: error.message || "An error occurred" });
     } finally {
-      set({ loading: false }); // Stop loading
+      set({ loading: false });
+    }
+  },
+
+  // Action to delete a product from the API and update the state
+  deleteProduct: async (productId: string) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/products/${productId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        set((state) => ({
+          products: state.products.filter(
+            (product) => product.id !== productId
+          ),
+        }));
+      } else {
+        throw new Error("Failed to delete product");
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
     }
   },
 }));

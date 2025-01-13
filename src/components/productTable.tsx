@@ -4,6 +4,7 @@ import TableHeader from "./tableComponents/tableHeader";
 import TableRow from "./tableComponents/tableRow";
 import Pagination from "./tableComponents/pagination";
 import DeleteModal from "./tableComponents/deleteModal";
+import { Product } from "../types/productTypes";
 
 const ProductTable = () => {
   const {
@@ -14,48 +15,33 @@ const ProductTable = () => {
     totalPages,
     fetchProducts,
     setPagination,
-    setProducts,
+    deleteProduct,
   } = ProductStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [productToDelete, setProductToDelete] = useState(null);
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
   useEffect(() => {
     fetchProducts(page);
   }, [fetchProducts, page]);
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPagination(newPage, totalPages);
     }
   };
 
-  const handleDeleteClick = (product) => {
+  const handleDeleteClick = (product: Product) => {
     setProductToDelete(product);
     setIsModalOpen(true);
   };
 
   const confirmDelete = async () => {
     if (productToDelete) {
-      try {
-        const response = await fetch(
-          `http://localhost:3001/api/products/${productToDelete.id}`,
-          {
-            method: "DELETE",
-          }
-        );
-
-        if (response.ok) {
-          setProducts(
-            products.filter((product) => product.id !== productToDelete.id)
-          );
-          setIsModalOpen(false);
-          setProductToDelete(null);
-          fetchProducts(page);
-        }
-      } catch (err) {
-        console.error("Error deleting product:", err);
-      }
+      await deleteProduct(productToDelete.id); // Call deleteProduct from the store
+      setIsModalOpen(false);
+      setProductToDelete(null);
+      fetchProducts(page); // Re-fetch products after deletion
     }
   };
 
