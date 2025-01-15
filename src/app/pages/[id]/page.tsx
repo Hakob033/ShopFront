@@ -27,10 +27,6 @@ const ProductPage: React.FC = () => {
     fetchProduct();
   }, []);
 
-  const handleEdit = () => {
-    alert("Edit product functionality here.");
-  };
-
   const handleDelete = () => {
     setShowDeleteModal(true); // Open the delete confirmation modal
   };
@@ -68,7 +64,6 @@ const ProductPage: React.FC = () => {
           product={product}
           // onClose={() => setShowModal(false)}
           onClose={handleOnClose}
-          onEdit={handleEdit}
           onDelete={handleDelete} // Open delete confirmation modal on delete button click
         />
       )}

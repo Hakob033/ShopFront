@@ -3,18 +3,17 @@ import Edit from "../app/icons/edit";
 import Delete from "../app/icons/delete";
 import { Product } from "../types/productTypes";
 import IconX from "../app/icons/iconX";
+import Link from "next/link";
 
 interface ProductInfoModalProps {
   product: Product;
   onClose: () => void;
-  onEdit: () => void;
   onDelete: () => void;
 }
 
 const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
   product,
   onClose,
-  onEdit,
   onDelete,
 }) => {
   const [activeTab, setActiveTab] = useState<
@@ -63,7 +62,7 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-32 h-32 object-cover rounded-md border"
+                  className="w-52 h-52 object-cover rounded-md border"
                 />
               </div>
 
@@ -135,12 +134,11 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
 
         {/* Footer */}
         <div className="flex justify-end gap-4 px-6 py-4 border-t">
-          <button
-            onClick={onEdit}
-            className="px-2 py-2 rounded-full bg-gray-400 text-sm text-white "
-          >
-            <Edit />
-          </button>
+          <Link href={`/pages/editProduct/${product.id}`}>
+            <button className="px-2 py-2 rounded-full bg-gray-400 text-sm text-white ">
+              <Edit />
+            </button>
+          </Link>
           <button
             onClick={onDelete}
             className="px-2 rounded-full bg-gray-400  py-2 text-sm text-white "

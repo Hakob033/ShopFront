@@ -41,7 +41,9 @@ const TableRow = ({ product, handleDeleteClick }) => (
         <Info />
       </Link>
 
-      <Edit />
+      <Link href={`/pages/editProduct/${product.id}`}>
+        <Edit />
+      </Link>
       <button
         onClick={() => handleDeleteClick(product)}
         className="text-red-500 hover:text-red-700"

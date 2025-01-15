@@ -8,7 +8,7 @@ const Pagination = ({
     <button
       onClick={() => handlePageChange(page - 1)}
       disabled={page === 1}
-      className="px-4 py-2 text-white bg-blue-500 rounded-lg"
+      className="px-4 py-2 text-black-100 rounded-lg"
     >
       &lt;
     </button>
@@ -22,10 +22,10 @@ const Pagination = ({
           key={index}
           onClick={() => handlePageChange(Number(p))}
           disabled={page === p}
-          className={`px-4 py-2 rounded-lg ${
+          className={`px-4 py-2 rounded-full ${
             page === p
-              ? "bg-blue-700 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              ? " text-black-100 rounded-full "
+              : "bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300"
           }`}
         >
           {p}
@@ -35,7 +35,7 @@ const Pagination = ({
     <button
       onClick={() => handlePageChange(page + 1)}
       disabled={page === totalPages}
-      className="px-4 py-2 text-white bg-blue-500 rounded-lg"
+      className="px-4 py-2 text-black-100  rounded-lg"
     >
       &gt;
     </button>
