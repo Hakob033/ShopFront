@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Product } from "../../types/productTypes";
+import Refresh from "../../app/icons/refresh";
 
 interface Step1Props {
   formData: Product;
@@ -20,24 +21,67 @@ const Step1: React.FC<Step1Props> = ({
   onNext,
   onCancel,
 }) => {
-  const handleImageUpload = (imageUrl: string) => {
-    onImageUpload(imageUrl); // Call the provided `onImageUpload` method
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files) {
+      const file = event.target.files[0];
+      if (file) {
+        // Simulate uploading the image to the server and getting a new image URL
+        const imageUrl = await uploadImage(file); // Replace this with your actual image upload logic
+        onImageUpload(imageUrl); // Update formData with the new image URL
+      }
+    }
+  };
+
+  const uploadImage = async (file: File): Promise<string> => {
+    // Here you would upload the image to your server and get the URL.
+    // For now, I'm returning a dummy URL as an example.
+    const formData = new FormData();
+    formData.append("image", file);
+
+    // Make the POST request to upload the image to your server
+    const response = await fetch("http://localhost:3001/uploads", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data.imageUrl; // This should be the URL returned by your backend after upload
+    } else {
+      throw new Error("Failed to upload image");
+    }
   };
 
   return (
     <div>
       <div className="grid grid-cols-2 gap-6">
-        <div className="relative">
+        <div className="relative h-full">
           <img
+            src={
+              `http://localhost:3001/${formData.imageUrl}` ||
+              "http://localhost:8080/images"
+            }
             alt="Product"
-            className="w-full h-full object-cover rounded-lg border border-gray-300"
+            className="w-full h-72 object-cover rounded-lg border border-gray-300"
           />
           <button
-            onClick={() => handleImageUpload("newImageURL")}
-            className="absolute top-2 right-2 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+            onClick={() => fileInputRef.current?.click()} // Trigger the file input on button click
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100"
           >
-            📷
+            <Refresh />
           </button>
+
+          {/* Hidden file input */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImageUpload}
+            className="hidden"
+          />
         </div>
 
         <div className="space-y-4">

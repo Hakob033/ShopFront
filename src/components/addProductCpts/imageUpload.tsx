@@ -2,24 +2,24 @@ import React, { useState } from "react";
 import Image from "../../app/icons/image";
 
 interface ImageUploadProps {
-  onImageUpload: (imageUrl: string) => void; // Callback to send image URL to parent
+  onImageUpload: (imageUrl: string) => void;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+  const [isImageUploaded, setIsImageUploaded] = useState(false); // Track if the image is uploaded
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Generate a local preview of the image
       const previewUrl = URL.createObjectURL(file);
       setImagePreviewUrl(previewUrl);
+      setIsImageUploaded(true); // Set to true after image is selected
 
       const formData = new FormData();
       formData.append("image", file);
 
       try {
-        // Upload the image to the server
         const response = await fetch("http://localhost:3001/uploads", {
           method: "POST",
           body: formData,
@@ -31,7 +31,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
 
         const data = await response.json();
         if (data.imageUrl) {
-          onImageUpload(data.imageUrl); // Pass uploaded image URL to parent
+          onImageUpload(data.imageUrl);
         }
       } catch (error) {
         console.error("Error uploading image:", error);
@@ -40,30 +40,31 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center border rounded-lg p-6">
-      <label
-        htmlFor="imageUpload"
-        className="flex flex-col items-center justify-center cursor-pointer"
-      >
-        <div className="flex flex-col items-center text-gray-400">
-          <Image />
-          <span className="mt-2 text-sm">Product Image</span>
-        </div>
-        <input
-          id="imageUpload"
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={handleImageChange}
-        />
-      </label>
-      {/* Show image preview */}
+    <div className="flex flex-col h-72 w-72 items-center justify-center border rounded-lg">
+      {!isImageUploaded && (
+        <label
+          htmlFor="imageUpload"
+          className="flex flex-col items-center justify-center cursor-pointer"
+        >
+          <div className="flex flex-col items-center text-gray-400">
+            <Image />
+            <span className="mt-2 text-sm">Product Image</span>
+          </div>
+          <input
+            id="imageUpload"
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageChange}
+          />
+        </label>
+      )}
       {imagePreviewUrl && (
-        <div className="mt-4">
+        <div className="">
           <img
             src={imagePreviewUrl}
             alt="Uploaded preview"
-            className="w-32 h-32 object-cover rounded-md"
+            className="w-72 h-72 object-cover rounded-md"
           />
         </div>
       )}

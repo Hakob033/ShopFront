@@ -26,6 +26,8 @@ const Step1: React.FC<Step1Props> = ({
   onCancel,
 }) => {
   const handleImageUpload = (imageUrl: string) => {
+    console.log(imageUrl);
+
     // Update formData with the uploaded image URL
     onChange({
       target: { name: "imageUrl", value: imageUrl },

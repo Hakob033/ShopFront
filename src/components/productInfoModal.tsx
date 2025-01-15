@@ -60,7 +60,10 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
               {/* Image */}
               <div>
                 <img
-                  src={product.image}
+                  src={
+                    `http://localhost:3001/${product.imageUrl}` ||
+                    "http://localhost:8080/images"
+                  }
                   alt={product.name}
                   className="w-52 h-52 object-cover rounded-md border"
                 />

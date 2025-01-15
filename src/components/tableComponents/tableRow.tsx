@@ -2,14 +2,18 @@ import Info from "../../app/icons/info";
 import Edit from "../../app/icons/edit";
 import Delete from "../../app/icons/delete";
 import Link from "next/link";
+import Image from "next/image";
 
 const TableRow = ({ product, handleDeleteClick }) => (
   <tr className="border-b">
-    <td className="px-6 py-4">
+    <td className="px-3 py-3">
       <img
-        src={product.image}
+        src={
+          `http://localhost:3001/${product.imageUrl}` ||
+          "http://localhost:8080/images"
+        }
         alt={product.name}
-        className="w-10 h-10 rounded-md"
+        className="w-16 h-16 rounded-md"
       />
     </td>
     <td className="px-6 py-4 text-sm text-gray-700">{product.name}</td>
@@ -36,7 +40,7 @@ const TableRow = ({ product, handleDeleteClick }) => (
           : "Out of Stock"}
       </span>
     </td>
-    <td className="px-6 py-6 flex space-x-2">
+    <td className="px-6 py-8 flex h-full space-x-2">
       <Link href={`/pages/${product.id}`}>
         <Info />
       </Link>
