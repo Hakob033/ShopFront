@@ -7,14 +7,14 @@ import StatusFilter from "./statusFilter";
 import Link from "next/link";
 
 const TableHeader = ({ setStatus, setSearch }) => {
-  const { user, logout, isAuthenticated } = AuthStore();
+  const { logout } = AuthStore();
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
     setUserName(localStorage.getItem("userName"));
-  });
+  }, []);
   const handleLogout = () => {
     logout();
     router.push("/pages/login");
