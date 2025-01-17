@@ -11,7 +11,7 @@ interface ProductStoreState {
   pageSize: number; // Number of products per page
   setProducts: (products: Product[]) => void; // Action to set products
   setPagination: (page: number, totalPages: number) => void; // Set pagination info
-  fetchProducts: (page: number) => Promise<void>; // Fetch products based on page
+  fetchProducts: (page: number, status: any) => Promise<void>; // Fetch products based on page
   deleteProduct: (productId: string) => Promise<void>; // Delete product
 }
 
@@ -31,16 +31,19 @@ export const ProductStore = create<ProductStoreState>((set) => ({
     set({ page, totalPages }),
 
   // Action to fetch products from API based on the page
-  fetchProducts: async (page: number) => {
+  fetchProducts: async (page: number, status?: string) => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch(
-        `http://localhost:3001/api/products?page=${page}&pageSize=6`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      // Build the URL with optional status filter
+      let url = `http://localhost:3001/api/products?page=${page}&pageSize=6`;
+      if (status) {
+        url += `&stockQuantity=${encodeURIComponent(status)}`;
+      }
+
+      const res = await fetch(url, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
 
       if (res.ok) {
         const data = await res.json();

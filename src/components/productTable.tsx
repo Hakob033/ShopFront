@@ -6,7 +6,9 @@ import Pagination from "./tableComponents/pagination";
 import DeleteModal from "./tableComponents/deleteModal";
 import { Product } from "../types/productTypes";
 
-const ProductTable = () => {
+const ProductTable = ({ status }) => {
+  console.log(status);
+
   const {
     products,
     loading,
@@ -22,8 +24,10 @@ const ProductTable = () => {
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
   useEffect(() => {
-    fetchProducts(page);
-  }, [fetchProducts, page]);
+    console.log(1, status, 1);
+
+    fetchProducts(page, status);
+  }, [status, page]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -41,7 +45,7 @@ const ProductTable = () => {
       await deleteProduct(productToDelete.id); // Call deleteProduct from the store
       setIsModalOpen(false);
       setProductToDelete(null);
-      fetchProducts(page); // Re-fetch products after deletion
+      fetchProducts(page, status); // Re-fetch products after deletion
     }
   };
 
