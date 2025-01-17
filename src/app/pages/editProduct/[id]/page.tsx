@@ -89,8 +89,8 @@ const EditProduct: React.FC = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-white shadow-lg rounded-lg flex justify-center items-center ">
-      <div className="w-full">
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="p-6 max-w-4xl w-full bg-white shadow-lg rounded-lg">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">
             {currentStep === 1 ? "Edit product" : "New product"}

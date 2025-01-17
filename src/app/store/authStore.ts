@@ -30,6 +30,7 @@ export const AuthStore = create<AuthState>((set) => {
             await res.json();
 
           Cookies.set("jwtToken", token);
+          localStorage.setItem("userName", user.name);
 
           set({
             user,
@@ -46,6 +47,7 @@ export const AuthStore = create<AuthState>((set) => {
     },
 
     logout: () => {
+      localStorage.removeItem("userName");
       Cookies.remove("jwtToken");
       set({
         user: null,

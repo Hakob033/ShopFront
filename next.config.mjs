@@ -2,6 +2,13 @@
 
 export default {
   images: {
-    domains: ["localhost"],
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3001",
+        pathname: "/**",
+      },
+    ],
   },
 };

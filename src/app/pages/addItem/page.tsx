@@ -27,9 +27,15 @@ const AddProduct = () => {
   ) => {
     const { name, value } = e.target;
 
+    // Handle numeric fields like price and stockQuantity
     const updatedValue =
-      name === "price" || name === "stockQuantity" ? Number(value) : value;
+      name === "price" || name === "stockQuantity"
+        ? value === "" // Allow empty values
+          ? "" // Keep it empty if input is cleared
+          : parseFloat(value) // Convert to float for decimal numbers
+        : value;
 
+    // Update the form data
     setFormData((prev) => ({ ...prev, [name]: updatedValue }));
   };
 

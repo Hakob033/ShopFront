@@ -58,8 +58,8 @@ const Step1: React.FC<Step1Props> = ({
       <div className="grid grid-cols-2 gap-6">
         <div className="relative">
           <Image
-            height={250}
-            width={350}
+            height={260}
+            width={260}
             src={
               formData.imageUrl
                 ? `http://localhost:3001/${formData.imageUrl}`

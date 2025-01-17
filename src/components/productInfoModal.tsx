@@ -53,13 +53,13 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
           ))}
         </div>
 
-        <div className="p-6 h-[40vh] overflow-auto">
+        <div className="p-6 h-[45vh] overflow-auto">
           {activeTab === "Details" && (
             <div className="flex gap-6">
               <div>
                 <Image
                   width={200}
-                  height={200}
+                  height={150}
                   src={
                     `http://localhost:3001/${product.imageUrl}` ||
                     "http://localhost:8080/images"
@@ -71,7 +71,7 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
               </div>
 
               <div className="flex-grow">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-6">
                   <p className="text-sm text-gray-600">Name</p>
                   <p className="text-sm font-semibold text-right">
                     {product.name}

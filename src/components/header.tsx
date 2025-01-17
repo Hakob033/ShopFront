@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AuthStore } from "../app/store/authStore";
 import Logout from "../app/icons/logout";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,11 @@ const TableHeader = ({ setStatus, setSearch }) => {
   const { user, logout, isAuthenticated } = AuthStore();
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
+  const [userName, setUserName] = useState("");
 
+  useEffect(() => {
+    setUserName(localStorage.getItem("userName"));
+  });
   const handleLogout = () => {
     logout();
     router.push("/pages/login");
@@ -20,8 +24,8 @@ const TableHeader = ({ setStatus, setSearch }) => {
     <div className="p-2 bg-gray-50">
       <div className="flex items-center justify-between">
         <div className="flex justify-center items-center gap-2">
-          {isAuthenticated ? (
-            <span className="text-dark">{user.name}</span>
+          {userName ? (
+            <span className="text-dark">{userName}</span>
           ) : (
             <span className="text-dark">Guest</span>
           )}

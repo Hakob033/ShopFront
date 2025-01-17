@@ -29,10 +29,8 @@ const TableHeader = () => (
       <th className={`px-6 py-3 text-sm text-left ${font.className} text-dark`}>
         Status
       </th>
-      <th className="px-6 py-3 text-left">
-        <button className="px-6 py-2 text-white bg-medium rounded-xl">
-          CSV
-        </button>
+      <th className={`px-6 py-3 text-sm text-left ${font.className}`}>
+        Options
       </th>
     </tr>
   </thead>
