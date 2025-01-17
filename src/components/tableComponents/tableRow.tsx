@@ -8,12 +8,15 @@ const TableRow = ({ product, handleDeleteClick }) => (
   <tr className="border-b">
     <td className="px-3 py-3">
       <Image
+        width={60}
+        height={60}
         src={
           `http://localhost:3001/${product.imageUrl}` ||
           "http://localhost:8080/images"
         }
         alt={product.name}
-        className="w-16 h-16 rounded-md"
+        priority={true}
+        className=" h-auto w-auto"
       />
     </td>
     <td className="px-6 py-4 text-sm text-gray-700">{product.name}</td>

@@ -30,20 +30,16 @@ const Step1: React.FC<Step1Props> = ({
     if (event.target.files) {
       const file = event.target.files[0];
       if (file) {
-        // Simulate uploading the image to the server and getting a new image URL
-        const imageUrl = await uploadImage(file); // Replace this with your actual image upload logic
-        onImageUpload(imageUrl); // Update formData with the new image URL
+        const imageUrl = await uploadImage(file);
+        onImageUpload(imageUrl);
       }
     }
   };
 
   const uploadImage = async (file: File): Promise<string> => {
-    // Here you would upload the image to your server and get the URL.
-    // For now, I'm returning a dummy URL as an example.
     const formData = new FormData();
     formData.append("image", file);
 
-    // Make the POST request to upload the image to your server
     const response = await fetch("http://localhost:3001/uploads", {
       method: "POST",
       body: formData,
@@ -51,7 +47,7 @@ const Step1: React.FC<Step1Props> = ({
 
     if (response.ok) {
       const data = await response.json();
-      return data.imageUrl; // This should be the URL returned by your backend after upload
+      return data.imageUrl;
     } else {
       throw new Error("Failed to upload image");
     }
@@ -60,25 +56,27 @@ const Step1: React.FC<Step1Props> = ({
   return (
     <div>
       <div className="grid grid-cols-2 gap-6">
-        <div className="relative h-full">
+        <div className="relative">
           <Image
-            height={72}
+            height={250}
+            width={350}
             src={
-              `http://localhost:3001/${formData.imageUrl}` ||
-              "http://localhost:8080/images"
+              formData.imageUrl
+                ? `http://localhost:3001/${formData.imageUrl}`
+                : "http://localhost:8080/images"
             }
+            className=" h-auto w-auto"
             alt="Product"
-            className="w-full h-72 object-cover rounded-lg border
-            border-gray-300"
-          ></Image>
+            priority={true}
+          />
+
           <button
-            onClick={() => fileInputRef.current?.click()} // Trigger the file input on button click
+            onClick={() => fileInputRef.current?.click()}
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100"
           >
             <Refresh />
           </button>
 
-          {/* Hidden file input */}
           <input
             type="file"
             ref={fileInputRef}

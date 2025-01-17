@@ -8,7 +8,7 @@ interface Step1Props {
     category: string;
     price: string;
     stockQuantity: string;
-    imageUrl: string; // Ensure `imageUrl` is included in formData
+    imageUrl: string;
   };
   onChange: (
     e: React.ChangeEvent<
@@ -26,9 +26,6 @@ const Step1: React.FC<Step1Props> = ({
   onCancel,
 }) => {
   const handleImageUpload = (imageUrl: string) => {
-    console.log(imageUrl);
-
-    // Update formData with the uploaded image URL
     onChange({
       target: { name: "imageUrl", value: imageUrl },
     } as React.ChangeEvent<HTMLInputElement>);
@@ -37,7 +34,6 @@ const Step1: React.FC<Step1Props> = ({
   return (
     <div>
       <div className="grid grid-cols-2 gap-6">
-        {/* Image Upload Component */}
         <ImageUpload onImageUpload={handleImageUpload} />
 
         <div className="space-y-4">

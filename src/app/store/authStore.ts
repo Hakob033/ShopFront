@@ -10,7 +10,6 @@ export const AuthStore = create<AuthState>((set) => {
     }
   };
 
-  // Restore session immediately after store creation
   restoreSession();
 
   return {
@@ -23,14 +22,14 @@ export const AuthStore = create<AuthState>((set) => {
         const res = await fetch("http://localhost:3001/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, password }), // Sending the login request
+          body: JSON.stringify({ name, password }),
         });
 
         if (res.ok) {
           const { token, user }: { token: string; user: User } =
             await res.json();
 
-          Cookies.set("jwtToken", token); // Save token in cookies
+          Cookies.set("jwtToken", token);
 
           set({
             user,
@@ -42,12 +41,12 @@ export const AuthStore = create<AuthState>((set) => {
         }
       } catch (error) {
         console.error("Login error:", error);
-        throw error; // Rethrow error to handle in UI (for example: showing an alert or message)
+        throw error;
       }
     },
 
     logout: () => {
-      Cookies.remove("jwtToken"); // Clear token from cookies
+      Cookies.remove("jwtToken");
       set({
         user: null,
         token: null,
@@ -55,6 +54,6 @@ export const AuthStore = create<AuthState>((set) => {
       });
     },
 
-    restoreSession, // Expose restoreSession if needed
+    restoreSession,
   };
 });

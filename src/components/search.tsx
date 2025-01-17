@@ -10,7 +10,7 @@ const SearchBar = ({ setSearch }: { setSearch: (value: string) => void }) => {
   };
 
   const handleSearchClick = () => {
-    setSearch(inputValue); // Trigger search with current input value
+    setSearch(inputValue);
   };
 
   return (
@@ -18,7 +18,7 @@ const SearchBar = ({ setSearch }: { setSearch: (value: string) => void }) => {
       <input
         type="text"
         value={inputValue}
-        onChange={handleInputChange} // Update state on input change
+        onChange={handleInputChange}
         placeholder="Search"
         className="block w-full px-4 py-2 text-sm text-gray-700 bg-white border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
       />

@@ -2,6 +2,6 @@
 
 export default {
   images: {
-    domains: ["localhost:3001", "another-example.com"],
+    domains: ["localhost"],
   },
 };

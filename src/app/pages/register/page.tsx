@@ -6,7 +6,7 @@ import Eye from "../../icons/eye";
 import EyeSlash from "../../icons/eyeSlash";
 import { useRouter } from "next/navigation";
 import Loading from "../../../components/loading";
-import Link from "next/link"; // Import Link from Next.js
+import Link from "next/link";
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,7 +29,7 @@ export default function Register() {
     const jwtToken = localStorage.getItem("jwtToken");
 
     if (jwtToken) {
-      router.push("/"); // Redirect to home if already logged in
+      router.push("/");
     } else {
       setIsLoggedIn(true);
     }
@@ -41,7 +41,10 @@ export default function Register() {
 
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    nextField: any
+    nextField:
+      | React.RefObject<HTMLInputElement>
+      | React.RefObject<HTMLButtonElement>
+      | null
   ) => {
     if (e.key === "Enter") {
       e.preventDefault();

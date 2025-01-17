@@ -7,7 +7,7 @@ import Step1 from "../../../components/addProductCpts/step1";
 import Step2 from "../../../components/addProductCpts/step2";
 
 const AddProduct = () => {
-  const [step, setStep] = useState(1); // Step state
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
     sku: "",
@@ -33,12 +33,10 @@ const AddProduct = () => {
     setFormData((prev) => ({ ...prev, [name]: updatedValue }));
   };
 
-  const handleNext = () => setStep(2); // Go to the next step
-  const handleBack = () => setStep(1); // Go back to the previous step
+  const handleNext = () => setStep(2);
+  const handleBack = () => setStep(1);
   const handleAdd = async () => {
     try {
-      console.log(formData);
-
       const response = await fetch("http://localhost:3001/api/products", {
         method: "POST",
         headers: {
@@ -53,7 +51,7 @@ const AddProduct = () => {
 
       const result = await response.json();
       console.log("Product added:", result);
-      router.push("/"); // Example redirection after adding product
+      router.push("/");
     } catch (error) {
       console.error("Error adding product:", error);
     }
@@ -66,10 +64,8 @@ const AddProduct = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl p-6">
-        {/* Header */}
         <ModalHeader onClose={handleCancel} />
 
-        {/* Conditional Rendering Based on Step */}
         {step === 1 ? (
           <Step1
             formData={formData}

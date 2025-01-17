@@ -12,8 +12,8 @@ const TableHeader = ({ setStatus, setSearch }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleLogout = () => {
-    logout(); // Perform logout
-    router.push("/pages/login"); // Redirect to login page
+    logout();
+    router.push("/pages/login");
   };
 
   return (
@@ -40,7 +40,6 @@ const TableHeader = ({ setStatus, setSearch }) => {
         </div>
       </div>
 
-      {/* Logout Confirmation Modal */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg p-6 shadow-lg">

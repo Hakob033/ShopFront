@@ -6,11 +6,11 @@ import Eye from "../../icons/eye";
 import EyeSlash from "../../icons/eyeSlash";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { AuthStore } from "../../store/authStore"; // Import your store
+import { AuthStore } from "../../store/authStore";
 
 export default function Login() {
   const router = useRouter();
-  const { login } = AuthStore(); // Access login function from your store
+  const { login } = AuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -23,24 +23,22 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); // Clear previous errors
+    setError(null);
 
     if (!name || !password) {
       setError("Please fill in both fields.");
       return;
     }
 
-    setLoading(true); // Start loading state
+    setLoading(true);
     try {
-      // Use the store's login method, which already includes the API call
       await login(name, password);
 
-      // Redirect to home page after successful login
       router.push("/");
     } catch (err) {
       setError(err);
     } finally {
-      setLoading(false); // Stop loading state
+      setLoading(false);
     }
   };
 
@@ -54,7 +52,6 @@ export default function Login() {
           <div className="text-red-500 text-sm text-center mt-2">{error}</div>
         )}
         <form className="mt-4" onSubmit={handleLogin}>
-          {/* Name Input */}
           <div className="mb-4">
             <input
               type="text"
@@ -66,7 +63,6 @@ export default function Login() {
             />
           </div>
 
-          {/* Password Input */}
           <div className="mb-4 relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -84,7 +80,6 @@ export default function Login() {
             </span>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -96,10 +91,9 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Link to Register Page */}
         <div className="mt-4 text-center">
           <p>
-            <span>Don't have an account?</span>
+            <span>Don&apos;t have an account?</span>
             <Link
               href="/pages/register"
               className="text-blue-500 hover:underline"

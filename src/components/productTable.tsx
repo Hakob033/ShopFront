@@ -39,10 +39,10 @@ const ProductTable = ({ status, search }) => {
 
   const confirmDelete = async () => {
     if (productToDelete) {
-      await deleteProduct(productToDelete.id); // Call deleteProduct from the store
+      await deleteProduct(productToDelete.id);
       setIsModalOpen(false);
       setProductToDelete(null);
-      fetchProducts(page, status, search); // Re-fetch products after deletion
+      fetchProducts(page, status, search);
     }
   };
 

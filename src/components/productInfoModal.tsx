@@ -24,7 +24,6 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-xl w-[600px] h-auto max-h-[70vh]">
-        {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b">
           <h2 className="text-xl font-semibold">Product Information</h2>
           <button
@@ -54,23 +53,23 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
           ))}
         </div>
 
-        {/* Content */}
         <div className="p-6 h-[40vh] overflow-auto">
           {activeTab === "Details" && (
             <div className="flex gap-6">
-              {/* Image */}
               <div>
                 <Image
+                  width={200}
+                  height={200}
                   src={
                     `http://localhost:3001/${product.imageUrl}` ||
                     "http://localhost:8080/images"
                   }
                   alt={product.name}
-                  className="w-52 h-52 object-cover rounded-md border"
+                  className="h-auto w-auto"
+                  priority={true}
                 ></Image>
               </div>
 
-              {/* Details */}
               <div className="flex-grow">
                 <div className="grid grid-cols-2 gap-4">
                   <p className="text-sm text-gray-600">Name</p>
@@ -136,7 +135,6 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
           )}
         </div>
 
-        {/* Footer */}
         <div className="flex justify-end gap-4 px-6 py-4 border-t">
           <Link href={`/pages/editProduct/${product.id}`}>
             <button className="px-2 py-2 rounded-full bg-gray-400 text-sm text-white ">

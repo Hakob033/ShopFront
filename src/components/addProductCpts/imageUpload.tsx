@@ -8,14 +8,14 @@ interface ImageUploadProps {
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
-  const [isImageUploaded, setIsImageUploaded] = useState(false); // Track if the image is uploaded
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const previewUrl = URL.createObjectURL(file);
       setImagePreviewUrl(previewUrl);
-      setIsImageUploaded(true); // Set to true after image is selected
+      setIsImageUploaded(true);
 
       const formData = new FormData();
       formData.append("image", file);
@@ -63,9 +63,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
       {imagePreviewUrl && (
         <div className="">
           <Image
+            height={270}
+            width={270}
             src={imagePreviewUrl}
             alt="Uploaded preview"
-            className="w-72 h-72 object-cover rounded-md"
+            priority={true}
+            className=" h-auto w-auto"
           />
         </div>
       )}

@@ -3,16 +3,20 @@ import { create } from "zustand";
 import { Product } from "../../types/productTypes";
 
 interface ProductStoreState {
-  products: Product[]; // State for storing products
-  loading: boolean; // Loading state
-  error: string | null; // Error state
-  page: number; // Current page
-  totalPages: number; // Total number of pages
-  pageSize: number; // Number of products per page
-  setProducts: (products: Product[]) => void; // Action to set products
-  setPagination: (page: number, totalPages: number) => void; // Set pagination info
-  fetchProducts: (page: number, status: any, search: any) => Promise<void>; // Fetch products based on page
-  deleteProduct: (productId: string) => Promise<void>; // Delete product
+  products: Product[];
+  loading: boolean;
+  error: string | null;
+  page: number;
+  totalPages: number;
+  pageSize: number;
+  setProducts: (products: Product[]) => void;
+  setPagination: (page: number, totalPages: number) => void;
+  fetchProducts: (
+    page: number,
+    status: string,
+    search: string
+  ) => Promise<void>;
+  deleteProduct: (productId: string) => Promise<void>;
 }
 
 export const ProductStore = create<ProductStoreState>((set) => ({
@@ -23,14 +27,11 @@ export const ProductStore = create<ProductStoreState>((set) => ({
   totalPages: 1,
   pageSize: 6,
 
-  // Action to set products
   setProducts: (products: Product[]) => set({ products }),
 
-  // Action to set pagination info
   setPagination: (page: number, totalPages: number) =>
     set({ page, totalPages }),
 
-  // Action to fetch products from API based on the page
   fetchProducts: async (page: number, status?: string, search?: string) => {
     set({ loading: true, error: null });
     try {
@@ -38,12 +39,10 @@ export const ProductStore = create<ProductStoreState>((set) => ({
       url.searchParams.append("page", page.toString());
       url.searchParams.append("pageSize", "6");
 
-      // Add status if provided
       if (status) {
         url.searchParams.append("stockQuantity", status);
       }
 
-      // Add search term if provided
       if (search) {
         url.searchParams.append("search", search);
       }
@@ -67,7 +66,6 @@ export const ProductStore = create<ProductStoreState>((set) => ({
     }
   },
 
-  // Action to delete a product from the API and update the state
   deleteProduct: async (productId: string) => {
     try {
       const response = await fetch(
