@@ -38,7 +38,7 @@ export default function Login() {
       // Redirect to home page after successful login
       router.push("/");
     } catch (err) {
-      setError("Login failed. Please try again.");
+      setError(err);
     } finally {
       setLoading(false); // Stop loading state
     }
@@ -99,7 +99,7 @@ export default function Login() {
         {/* Link to Register Page */}
         <div className="mt-4 text-center">
           <p>
-            Don't have an account?{" "}
+            <span>Don't have an account?</span>
             <Link
               href="/pages/register"
               className="text-blue-500 hover:underline"

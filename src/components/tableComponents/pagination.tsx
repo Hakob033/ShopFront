@@ -5,13 +5,15 @@ const Pagination = ({
   generatePagination,
 }) => (
   <div className="mt-4 flex justify-end items-center space-x-2">
-    <button
-      onClick={() => handlePageChange(page - 1)}
-      disabled={page === 1}
-      className="px-4 py-2 text-black-100 rounded-lg"
-    >
-      &lt;
-    </button>
+    {totalPages === 0 ? null : (
+      <button
+        onClick={() => handlePageChange(page - 1)}
+        disabled={page === 1}
+        className="px-4 py-2 text-black-100 rounded-lg"
+      >
+        &lt;
+      </button>
+    )}
     {generatePagination().map((p, index) =>
       p === "..." ? (
         <span key={index} className="px-4 py-2 text-gray-500">
@@ -32,13 +34,15 @@ const Pagination = ({
         </button>
       )
     )}
-    <button
-      onClick={() => handlePageChange(page + 1)}
-      disabled={page === totalPages}
-      className="px-4 py-2 text-black-100  rounded-lg"
-    >
-      &gt;
-    </button>
+    {totalPages === 0 ? null : (
+      <button
+        onClick={() => handlePageChange(page + 1)}
+        disabled={page === totalPages}
+        className="px-4 py-2 text-black-100  rounded-lg"
+      >
+        &gt;
+      </button>
+    )}
   </div>
 );
 

@@ -4,6 +4,7 @@ import Delete from "../app/icons/delete";
 import { Product } from "../types/productTypes";
 import IconX from "../app/icons/iconX";
 import Link from "next/link";
+import Image from "next/image";
 
 interface ProductInfoModalProps {
   product: Product;
@@ -59,14 +60,14 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
             <div className="flex gap-6">
               {/* Image */}
               <div>
-                <img
+                <Image
                   src={
                     `http://localhost:3001/${product.imageUrl}` ||
                     "http://localhost:8080/images"
                   }
                   alt={product.name}
                   className="w-52 h-52 object-cover rounded-md border"
-                />
+                ></Image>
               </div>
 
               {/* Details */}

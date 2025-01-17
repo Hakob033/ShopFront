@@ -7,7 +7,7 @@ import Image from "next/image";
 const TableRow = ({ product, handleDeleteClick }) => (
   <tr className="border-b">
     <td className="px-3 py-3">
-      <img
+      <Image
         src={
           `http://localhost:3001/${product.imageUrl}` ||
           "http://localhost:8080/images"

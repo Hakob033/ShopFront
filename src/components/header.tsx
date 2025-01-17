@@ -6,7 +6,7 @@ import SearchBar from "./search";
 import StatusFilter from "./statusFilter";
 import Link from "next/link";
 
-const TableHeader = ({ setStatus }) => {
+const TableHeader = ({ setStatus, setSearch }) => {
   const { user, logout, isAuthenticated } = AuthStore();
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
@@ -30,7 +30,7 @@ const TableHeader = ({ setStatus }) => {
           </button>
         </div>
         <div className="flex items-center space-x-4">
-          <SearchBar />
+          <SearchBar setSearch={setSearch} />
           <StatusFilter onChange={setStatus} />
           <Link href="/pages/addItem">
             <button className="px-6 py-2 text-nowrap rounded-xl text-white bg-medium">

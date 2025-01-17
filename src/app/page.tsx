@@ -1,22 +1,17 @@
 "use client";
 
-import { Poppins } from "next/font/google";
 import TableHeader from "../components/header";
 import ProductTable from "../components/productTable";
 import { useState } from "react";
 
-const font = Poppins({
-  weight: ["600"],
-  subsets: ["latin"],
-});
-
 const App = () => {
-  const [status, setStatus] = useState<string>(""); // Shared state for status
+  const [status, setStatus] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <TableHeader setStatus={setStatus} />
-      <ProductTable status={status} />
+      <TableHeader setStatus={setStatus} setSearch={setSearch} />
+      <ProductTable status={status} search={search} />
     </div>
   );
 };

@@ -41,7 +41,7 @@ export default function Register() {
 
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    nextField?: any
+    nextField: any
   ) => {
     if (e.key === "Enter") {
       e.preventDefault();

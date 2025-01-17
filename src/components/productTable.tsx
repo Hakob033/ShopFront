@@ -5,10 +5,9 @@ import TableRow from "./tableComponents/tableRow";
 import Pagination from "./tableComponents/pagination";
 import DeleteModal from "./tableComponents/deleteModal";
 import { Product } from "../types/productTypes";
+import Loading from "./loading";
 
-const ProductTable = ({ status }) => {
-  console.log(status);
-
+const ProductTable = ({ status, search }) => {
   const {
     products,
     loading,
@@ -24,10 +23,8 @@ const ProductTable = ({ status }) => {
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
   useEffect(() => {
-    console.log(1, status, 1);
-
-    fetchProducts(page, status);
-  }, [status, page]);
+    fetchProducts(page, status, search);
+  }, [fetchProducts, status, page, search]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -45,7 +42,7 @@ const ProductTable = ({ status }) => {
       await deleteProduct(productToDelete.id); // Call deleteProduct from the store
       setIsModalOpen(false);
       setProductToDelete(null);
-      fetchProducts(page, status); // Re-fetch products after deletion
+      fetchProducts(page, status, search); // Re-fetch products after deletion
     }
   };
 
@@ -83,7 +80,7 @@ const ProductTable = ({ status }) => {
   return (
     <div>
       <div className="overflow-hidden border rounded-lg shadow">
-        {loading && <p>Loading...</p>}
+        {loading && <Loading />}
         {error && <p className="text-red-500">{error}</p>}
 
         <table className="min-w-full bg-white">

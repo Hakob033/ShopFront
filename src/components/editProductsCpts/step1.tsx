@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { Product } from "../../types/productTypes";
 import Refresh from "../../app/icons/refresh";
+import Image from "next/image";
 
 interface Step1Props {
   formData: Product;
@@ -60,14 +61,16 @@ const Step1: React.FC<Step1Props> = ({
     <div>
       <div className="grid grid-cols-2 gap-6">
         <div className="relative h-full">
-          <img
+          <Image
+            height={72}
             src={
               `http://localhost:3001/${formData.imageUrl}` ||
               "http://localhost:8080/images"
             }
             alt="Product"
-            className="w-full h-72 object-cover rounded-lg border border-gray-300"
-          />
+            className="w-full h-72 object-cover rounded-lg border
+            border-gray-300"
+          ></Image>
           <button
             onClick={() => fileInputRef.current?.click()} // Trigger the file input on button click
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100"

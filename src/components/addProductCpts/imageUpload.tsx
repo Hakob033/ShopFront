@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Image from "../../app/icons/image";
+import ImageIcon from "../../app/icons/image";
+import Image from "next/image";
 
 interface ImageUploadProps {
   onImageUpload: (imageUrl: string) => void;
@@ -47,7 +48,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
           className="flex flex-col items-center justify-center cursor-pointer"
         >
           <div className="flex flex-col items-center text-gray-400">
-            <Image />
+            <ImageIcon />
             <span className="mt-2 text-sm">Product Image</span>
           </div>
           <input
@@ -61,7 +62,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
       )}
       {imagePreviewUrl && (
         <div className="">
-          <img
+          <Image
             src={imagePreviewUrl}
             alt="Uploaded preview"
             className="w-72 h-72 object-cover rounded-md"
