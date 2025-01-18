@@ -17,9 +17,9 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
   onClose,
   onDelete,
 }) => {
-  const [activeTab, setActiveTab] = useState<
-    "Details" | "Description" | "History"
-  >("Details");
+  const [activeTab, setActiveTab] = useState<"Details" | "Description">(
+    "Details"
+  );
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -36,12 +36,10 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
 
         {/* Tabs */}
         <div className="flex border-b text-center">
-          {["Details", "Description", "History"].map((tab) => (
+          {["Details", "Description"].map((tab) => (
             <button
               key={tab}
-              onClick={() =>
-                setActiveTab(tab as "Details" | "Description" | "History")
-              }
+              onClick={() => setActiveTab(tab as "Details" | "Description")}
               className={`flex-1 py-3 ${
                 activeTab === tab
                   ? "border-b-4 border-blue-500 text-blue-500 font-semibold"
@@ -123,14 +121,6 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
           {activeTab === "Description" && (
             <div>
               <p className="text-sm text-gray-600">{product.description}</p>
-            </div>
-          )}
-
-          {activeTab === "History" && (
-            <div>
-              <p className="text-sm text-gray-600">
-                Product history will go here.
-              </p>
             </div>
           )}
         </div>

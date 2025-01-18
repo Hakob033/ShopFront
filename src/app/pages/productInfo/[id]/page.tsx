@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import ProductInfoModal from "../../../components/productInfoModal";
-import { ProductStore } from "../../store/productStore";
+import ProductInfoModal from "../../../../components/productInfoModal";
+import { ProductStore } from "../../../store/productStore";
 import { useRouter } from "next/navigation";
-import { Product } from "../../../types/productTypes";
+import { Product } from "../../../../types/productTypes";
 
 const ProductPage: React.FC = () => {
   const [showModal, setShowModal] = useState(true);

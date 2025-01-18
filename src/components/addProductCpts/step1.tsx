@@ -31,6 +31,13 @@ const Step1: React.FC<Step1Props> = ({
     } as React.ChangeEvent<HTMLInputElement>);
   };
 
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (value === "" || (Number(value) >= 0 && !value.startsWith("-"))) {
+      onChange(e);
+    }
+  };
+
   return (
     <div>
       <div className="grid grid-cols-2 gap-6">
@@ -69,7 +76,7 @@ const Step1: React.FC<Step1Props> = ({
             name="price"
             placeholder="Price"
             value={formData.price}
-            onChange={onChange}
+            onChange={handleNumberChange}
             className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-medium"
           />
           <input
@@ -77,7 +84,7 @@ const Step1: React.FC<Step1Props> = ({
             name="stockQuantity"
             placeholder="Stock Quantity"
             value={formData.stockQuantity}
-            onChange={onChange}
+            onChange={handleNumberChange}
             className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-medium"
           />
         </div>

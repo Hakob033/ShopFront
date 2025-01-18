@@ -44,7 +44,7 @@ const TableRow = ({ product, handleDeleteClick }) => (
       </span>
     </td>
     <td className="px-6 py-8 flex h-full space-x-2">
-      <Link href={`/pages/${product.id}`}>
+      <Link href={`/pages/productInfo/${product.id}`}>
         <Info />
       </Link>
 

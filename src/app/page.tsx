@@ -9,7 +9,7 @@ const App = () => {
   const [search, setSearch] = useState<string>("");
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-3 pt-0 bg-gray-50 min-h-screen">
       <TableHeader setStatus={setStatus} setSearch={setSearch} />
       <ProductTable status={status} search={search} />
     </div>

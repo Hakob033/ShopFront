@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ImageIcon from "../../app/icons/image";
 import Image from "next/image";
+import Refresh from "../../app/icons/refresh";
 
 interface ImageUploadProps {
   onImageUpload: (imageUrl: string) => void;
@@ -8,14 +9,12 @@ interface ImageUploadProps {
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
-  const [isImageUploaded, setIsImageUploaded] = useState(false);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const previewUrl = URL.createObjectURL(file);
       setImagePreviewUrl(previewUrl);
-      setIsImageUploaded(true);
 
       const formData = new FormData();
       formData.append("image", file);
@@ -41,8 +40,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
   };
 
   return (
-    <div className="flex flex-col h-72 w-72 items-center justify-center border rounded-lg">
-      {!isImageUploaded && (
+    <div className="relative flex flex-col h-72 w-72 items-center justify-center border rounded-lg">
+      {!imagePreviewUrl && (
         <label
           htmlFor="imageUpload"
           className="flex flex-col items-center justify-center cursor-pointer"
@@ -60,18 +59,33 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
           />
         </label>
       )}
+
       {imagePreviewUrl && (
-        <div className="">
+        <div className="relative h-full w-full flex items-center justify-center">
           <Image
             height={270}
             width={270}
             src={imagePreviewUrl}
             alt="Uploaded preview"
             priority={true}
-            className=" h-auto w-auto"
+            className="h-full w-full object-cover rounded-lg"
           />
+          <button
+            onClick={() => document.getElementById("imageUpload")?.click()}
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+          >
+            <Refresh />
+          </button>
         </div>
       )}
+
+      <input
+        id="imageUpload"
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleImageChange}
+      />
     </div>
   );
 };
