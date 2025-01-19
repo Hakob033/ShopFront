@@ -32,7 +32,7 @@ const Step1: React.FC<Step1Props> = ({
   };
 
   const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
     if (value === "" || (Number(value) >= 0 && !value.startsWith("-"))) {
       onChange(e);
     }
