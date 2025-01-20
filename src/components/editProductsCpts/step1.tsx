@@ -92,10 +92,12 @@ const Step1: React.FC<Step1Props> = ({
           </button>
 
           <input
+            id="imageUpload"
             type="file"
+            accept="image/*"
+            className="hidden"
             ref={fileInputRef}
             onChange={handleImageUpload}
-            className="hidden"
           />
         </div>
 
