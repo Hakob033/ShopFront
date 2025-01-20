@@ -5,21 +5,23 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("jwtToken")?.value;
 
   const protectedRoutes = [
-    "/",
-    "/pages/addItem",
-    "pages/editProduct",
-    "pages/productInfo",
+    /^\/$/, // Root path
+    /^\/pages\/addItem$/, // Exact match for "/pages/addItem"
+    /^\/pages\/editProduct\/\d+$/, // Matches "/pages/editProduct/{id}"
+    /^\/pages\/productInfo\/\d+$/, // Matches "/pages/productInfo/{id}"
   ];
-  const authPages = ["/pages/login", "/pages/register"];
+  const authPages = [/^\/pages\/login$/, /^\/pages\/register$/];
 
   const currentPath = req.nextUrl.pathname;
 
-  if (protectedRoutes.includes(currentPath) && !token) {
+  // Check if the current path matches any protected routes
+  if (protectedRoutes.some((route) => route.test(currentPath)) && !token) {
     const loginUrl = new URL("/pages/login", req.url);
     return NextResponse.redirect(loginUrl);
   }
 
-  if (authPages.includes(currentPath) && token) {
+  // Check if the current path matches any auth pages
+  if (authPages.some((route) => route.test(currentPath)) && token) {
     const homeUrl = new URL("/", req.url);
     return NextResponse.redirect(homeUrl);
   }
