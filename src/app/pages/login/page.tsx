@@ -32,11 +32,13 @@ export default function Login() {
 
     setLoading(true);
     try {
+      // Attempt to log in
       await login(name, password);
 
+      // Redirect to home on success
       router.push("/");
     } catch (err) {
-      setError(err);
+      setError("Invalid username or password.");
     } finally {
       setLoading(false);
     }
@@ -49,7 +51,7 @@ export default function Login() {
           Login
         </h2>
         {error && (
-          <div className="text-red-500 text-sm text-center mt-2">{error}</div>
+          <div className="text-red text-sm text-center mt-2">{error}</div>
         )}
         <form className="mt-4" onSubmit={handleLogin}>
           <div className="mb-4">

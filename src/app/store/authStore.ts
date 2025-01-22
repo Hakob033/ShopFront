@@ -38,10 +38,14 @@ export const AuthStore = create<AuthState>((set) => {
             isAuthenticated: true,
           });
         } else {
-          throw new Error("Login failed");
+          const errorData = await res.json();
+          if (errorData.message === "Invalid username or password.") {
+            throw new Error("Invalid username or password.");
+          } else {
+            throw new Error("Login failed. Please try again.");
+          }
         }
       } catch (error) {
-        console.error("Login error:", error);
         throw error;
       }
     },

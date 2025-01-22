@@ -15,6 +15,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [isTaken, setIsTaken] = useState(false);
   const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const router = useRouter();
 
@@ -48,6 +49,7 @@ export default function Register() {
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () =>
     setConfirmPassword(!confirmPassword);
+
   useEffect(() => {
     const jwtToken = localStorage.getItem("jwtToken");
 
@@ -82,6 +84,14 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validate password length
+    if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters long.");
+      return;
+    } else {
+      setPasswordError(""); // Clear the error message
+    }
+
     if (!name || !password || confirmPasswordValue !== password) {
       return;
     }
@@ -113,7 +123,6 @@ export default function Register() {
       }
 
       const data = await response.json();
-      console.log("Registration successful:", data);
       router.push("/pages/login");
     } catch (error) {
       console.error("Error during registration:", error);
@@ -130,7 +139,9 @@ export default function Register() {
           <div className="mb-4">
             <span>
               {isTaken ? (
-                <div className=" text-center">Username is taken</div>
+                <div className=" text-center text-sm text-red">
+                  Username is taken
+                </div>
               ) : (
                 <div></div>
               )}
@@ -156,6 +167,11 @@ export default function Register() {
             />
           </div>
 
+          {passwordError && (
+            <div className="text-red text-sm text-center mt-2">
+              {passwordError}
+            </div>
+          )}
           <div className="mb-4 relative">
             <input
               type={showPassword ? "text" : "password"}

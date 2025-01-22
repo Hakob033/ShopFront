@@ -76,7 +76,6 @@ const AddProduct = () => {
       }
 
       const result = await response.json();
-      console.log("Product added:", result);
       router.push("/");
     } catch (error) {
       console.error("Error adding product:", error);
