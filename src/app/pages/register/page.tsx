@@ -13,6 +13,7 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState(false);
   const [name, setname] = useState("");
   const [password, setPassword] = useState("");
+  const [isTaken, setIsTaken] = useState(false);
   const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
 
   const router = useRouter();
@@ -21,6 +22,28 @@ export default function Register() {
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+
+  const checkUsernameAvailability = async (name: string): Promise<boolean> => {
+    try {
+      const response = await fetch("http://localhost:3001/auth/check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name }),
+      });
+
+      if (response.ok) {
+        return true; // Username is available
+      }
+
+      const errorData = await response.json();
+      return false; // Username is taken
+    } catch (error) {
+      console.error("Error checking username:");
+      return false;
+    }
+  };
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () =>
@@ -59,35 +82,41 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (name && password && confirmPasswordValue === password) {
-      const userData = {
-        name,
-        password,
-      };
+    if (!name || !password || confirmPasswordValue !== password) {
+      return;
+    }
 
-      try {
-        const response = await fetch("http://localhost:3001/auth/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
-        });
+    const isAvailable = await checkUsernameAvailability(name);
 
-        if (!response.ok) {
-          const errorDetails = await response.text();
-          console.error("Fetch error details:", errorDetails);
-          throw new Error("Registration failed");
-        }
+    if (!isAvailable) {
+      return;
+    }
 
-        const data = await response.json();
-        console.log("Registration successful:", data);
-        router.push("/pages/login");
-      } catch (error) {
-        console.error("Error during registration:", error);
+    const userData = {
+      name,
+      password,
+    };
+
+    try {
+      const response = await fetch("http://localhost:3001/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        const errorDetails = await response.text();
+        console.error("Fetch error details:", errorDetails);
+        throw new Error("Registration failed");
       }
-    } else {
-      console.log("Please fill in all fields correctly.");
+
+      const data = await response.json();
+      console.log("Registration successful:", data);
+      router.push("/pages/login");
+    } catch (error) {
+      console.error("Error during registration:", error);
     }
   };
 
@@ -99,13 +128,31 @@ export default function Register() {
         </h2>
         <form className="mt-4" onSubmit={handleSubmit}>
           <div className="mb-4">
+            <span>
+              {isTaken ? (
+                <div className=" text-center">Username is taken</div>
+              ) : (
+                <div></div>
+              )}
+            </span>
             <input
               type="text"
               id="name"
               className="w-full px-4 py-2 mt-1 text-gray-700 border border-dark rounded-xl outline-none"
               placeholder="Name"
               value={name}
-              onChange={(e) => setname(e.target.value)}
+              onChange={async (e) => {
+                setname(e.target.value);
+                if (e.target.value) {
+                  const isAvailable = await checkUsernameAvailability(
+                    e.target.value
+                  );
+                  setIsTaken(false);
+                  if (!isAvailable) {
+                    setIsTaken(true);
+                  }
+                }
+              }}
             />
           </div>
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ImageUpload from "./imageUpload";
 
 interface Step1Props {
@@ -17,6 +17,9 @@ interface Step1Props {
   ) => void;
   onNext: () => void;
   onCancel: () => void;
+  onValidate?: (sku: string) => Promise<boolean>;
+  onSkuCheck: (hasError: boolean) => void;
+  skuCheck: boolean;
 }
 
 const Step1: React.FC<Step1Props> = ({
@@ -24,6 +27,9 @@ const Step1: React.FC<Step1Props> = ({
   onChange,
   onNext,
   onCancel,
+  onValidate,
+  onSkuCheck,
+  skuCheck,
 }) => {
   const handleImageUpload = (imageUrl: string) => {
     onChange({
@@ -31,6 +37,7 @@ const Step1: React.FC<Step1Props> = ({
     } as React.ChangeEvent<HTMLInputElement>);
   };
 
+  const [validation, setValidaton] = useState(false);
   const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (value === "" || (Number(value) >= 0 && !value.startsWith("-"))) {
@@ -38,11 +45,37 @@ const Step1: React.FC<Step1Props> = ({
     }
   };
 
+  const handleNextClick = async () => {
+    // Check if all fields are filled
+    const { name, sku, category, price, stockQuantity, imageUrl } = formData;
+    if (!name || !sku || !category || !price || !stockQuantity || !imageUrl) {
+      setValidaton(true);
+      return;
+    }
+    setValidaton(false);
+
+    if (onValidate) {
+      const isSkuValid = await onValidate(formData.sku);
+      if (!isSkuValid) {
+        onSkuCheck(true); // Set error
+        return;
+      }
+      onSkuCheck(false); // Clear error
+    }
+
+    onNext();
+  };
+
   return (
     <div>
+      {validation ? (
+        <div className=" text-red text-sm text-center">
+          Please fill out all fields
+        </div>
+      ) : null}
+      .
       <div className="grid grid-cols-2 gap-6">
         <ImageUpload onImageUpload={handleImageUpload} />
-
         <div className="space-y-4">
           <input
             type="text"
@@ -52,6 +85,7 @@ const Step1: React.FC<Step1Props> = ({
             onChange={onChange}
             className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-medium"
           />
+          {skuCheck && <div>SKU is taken</div>} {/* Error display */}
           <input
             type="text"
             name="sku"
@@ -89,7 +123,6 @@ const Step1: React.FC<Step1Props> = ({
           />
         </div>
       </div>
-
       <div className="flex justify-between mt-6">
         <button
           onClick={onCancel}
@@ -98,7 +131,7 @@ const Step1: React.FC<Step1Props> = ({
           Cancel
         </button>
         <button
-          onClick={onNext}
+          onClick={handleNextClick}
           className="px-6 py-2 bg-medium text-white rounded-lg hover:bg-dark"
         >
           Next
