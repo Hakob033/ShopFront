@@ -6,7 +6,7 @@ export default {
       {
         protocol: "http",
         hostname: "localhost",
-        port: "3001",
+        port: "8080",
         pathname: "/**",
       },
     ],

@@ -38,6 +38,7 @@ export default function Login() {
       // Redirect to home on success
       router.push("/");
     } catch (err) {
+      console.error("Invalid username or password.", err);
       setError("Invalid username or password.");
     } finally {
       setLoading(false);

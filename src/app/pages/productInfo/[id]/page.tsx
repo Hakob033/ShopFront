@@ -25,7 +25,7 @@ const ProductPage: React.FC = () => {
     };
 
     fetchProduct();
-  }, []);
+  }, [baseUrl]);
 
   const handleDelete = () => {
     setShowDeleteModal(true);

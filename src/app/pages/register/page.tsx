@@ -121,7 +121,6 @@ export default function Register() {
         throw new Error("Registration failed");
       }
 
-      const data = await response.json();
       router.push("/pages/login");
     } catch (error) {
       console.error("Error during registration:", error);

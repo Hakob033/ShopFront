@@ -41,7 +41,7 @@ const EditProduct: React.FC = () => {
     };
 
     fetchProduct();
-  }, [id]);
+  }, [id, baseUrl]);
 
   const handleChange = (
     e: React.ChangeEvent<
