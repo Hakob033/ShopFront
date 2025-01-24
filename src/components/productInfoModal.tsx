@@ -20,6 +20,7 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
   const [activeTab, setActiveTab] = useState<"Details" | "Description">(
     "Details"
   );
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -59,7 +60,7 @@ const ProductInfoModal: React.FC<ProductInfoModalProps> = ({
                   width={200}
                   height={150}
                   src={
-                    `http://localhost:3001/${product.imageUrl}` ||
+                    `${baseUrl}${product.imageUrl}` ||
                     "http://localhost:8080/images"
                   }
                   alt={product.name}

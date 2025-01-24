@@ -7,6 +7,8 @@ interface ImageUploadProps {
   onImageUpload: (imageUrl: string) => void;
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
@@ -20,7 +22,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
       formData.append("image", file);
 
       try {
-        const response = await fetch("http://localhost:3001/uploads", {
+        const response = await fetch(`${baseUrl}uploads`, {
           method: "POST",
           body: formData,
         });

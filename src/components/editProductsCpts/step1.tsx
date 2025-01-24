@@ -24,6 +24,8 @@ const Step1: React.FC<Step1Props> = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -40,7 +42,7 @@ const Step1: React.FC<Step1Props> = ({
     const formData = new FormData();
     formData.append("image", file);
 
-    const response = await fetch("http://localhost:3001/uploads", {
+    const response = await fetch(`${baseUrl}uploads`, {
       method: "POST",
       body: formData,
     });
@@ -76,7 +78,7 @@ const Step1: React.FC<Step1Props> = ({
             width={260}
             src={
               formData.imageUrl
-                ? `http://localhost:3001/${formData.imageUrl}`
+                ? `${baseUrl}${formData.imageUrl}`
                 : "http://localhost:8080/images"
             }
             className="h-full w-full object-cover"

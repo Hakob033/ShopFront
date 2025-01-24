@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { AuthState, User } from "../../types/authTypes";
 import Cookies from "js-cookie";
 
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 export const AuthStore = create<AuthState>((set) => {
   const restoreSession = () => {
     const token = Cookies.get("jwtToken");
@@ -19,7 +20,7 @@ export const AuthStore = create<AuthState>((set) => {
 
     login: async (name: string, password: string) => {
       try {
-        const res = await fetch("http://localhost:3001/auth/login", {
+        const res = await fetch(`${baseUrl}auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, password }),

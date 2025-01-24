@@ -16,35 +16,34 @@ export default function Register() {
   const [isTaken, setIsTaken] = useState(false);
   const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
   const [passwordError, setPasswordError] = useState("");
-
   const router = useRouter();
-
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
-  const checkUsernameAvailability = async (name: string): Promise<boolean> => {
-    try {
-      const response = await fetch("http://localhost:3001/auth/check", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name }),
-      });
+  // const checkUsernameAvailability = async (name: string): Promise<boolean> => {
+  //   try {
+  //     const response = await fetch("http://localhost:8080/auth/check", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ name }),
+  //     });
 
-      if (response.ok) {
-        return true; // Username is available
-      }
+  //     if (response.ok) {
+  //       return true; // Username is available
+  //     }
 
-      const errorData = await response.json();
-      return false; // Username is taken
-    } catch (error) {
-      console.error("Error checking username:");
-      return false;
-    }
-  };
+  //     const errorData = await response.json();
+  //     return false; // Username is taken
+  //   } catch (error) {
+  //     console.error("Error checking username:");
+  //     return false;
+  //   }
+  // };
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () =>
@@ -96,11 +95,11 @@ export default function Register() {
       return;
     }
 
-    const isAvailable = await checkUsernameAvailability(name);
+    // const isAvailable = await checkUsernameAvailability(name);
 
-    if (!isAvailable) {
-      return;
-    }
+    // if (!isAvailable) {
+    //   return;
+    // }
 
     const userData = {
       name,
@@ -108,7 +107,7 @@ export default function Register() {
     };
 
     try {
-      const response = await fetch("http://localhost:3001/auth/register", {
+      const response = await fetch(`${baseUrl}auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -155,13 +154,13 @@ export default function Register() {
               onChange={async (e) => {
                 setname(e.target.value);
                 if (e.target.value) {
-                  const isAvailable = await checkUsernameAvailability(
-                    e.target.value
-                  );
+                  // const isAvailable = await checkUsernameAvailability(
+                  //   e.target.value
+                  // );
                   setIsTaken(false);
-                  if (!isAvailable) {
-                    setIsTaken(true);
-                  }
+                  // if (!isAvailable) {
+                  //   setIsTaken(true);
+                  // }
                 }
               }}
             />

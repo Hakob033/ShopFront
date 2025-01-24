@@ -11,6 +11,7 @@ import Loading from "../../../../components/loading";
 const EditProduct: React.FC = () => {
   const router = useRouter();
   const [id, setId] = useState<string | null>(null);
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -27,9 +28,7 @@ const EditProduct: React.FC = () => {
     if (!id) return;
     const fetchProduct = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3001/api/products/${id}`
-        );
+        const response = await fetch(`${baseUrl}api/products/${id}`);
         if (!response.ok) throw new Error("Failed to fetch product data");
 
         const data = await response.json();
@@ -65,7 +64,7 @@ const EditProduct: React.FC = () => {
     try {
       if (!formData) return;
 
-      const response = await fetch(`http://localhost:3001/api/products/${id}`, {
+      const response = await fetch(`${baseUrl}api/products/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

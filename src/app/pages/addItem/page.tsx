@@ -9,6 +9,7 @@ import Step2 from "../../../components/addProductCpts/step2";
 const AddProduct = () => {
   const [step, setStep] = useState(1);
   const [skuCheck, setSkuCheck] = useState(false); // Updated variable name
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -24,7 +25,7 @@ const AddProduct = () => {
 
   const validateSku = async (sku: string): Promise<boolean> => {
     try {
-      const response = await fetch("http://localhost:3001/api/skuCheck", {
+      const response = await fetch(`${baseUrl}api/skuCheck`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +64,7 @@ const AddProduct = () => {
   const handleBack = () => setStep(1);
   const handleAdd = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/products", {
+      const response = await fetch(`${baseUrl}api/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

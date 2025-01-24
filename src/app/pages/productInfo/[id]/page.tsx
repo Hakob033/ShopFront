@@ -10,6 +10,7 @@ const ProductPage: React.FC = () => {
   const [showModal, setShowModal] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const router = useRouter();
 
@@ -18,7 +19,7 @@ const ProductPage: React.FC = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       const id: string = window.location.pathname.split("/").pop()!;
-      const res = await fetch(`http://localhost:3001/api/products/${id}`);
+      const res = await fetch(`${baseUrl}api/products/${id}`);
       const data = await res.json();
       setProduct(data);
     };

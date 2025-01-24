@@ -2,6 +2,8 @@
 import { create } from "zustand";
 import { Product } from "../../types/productTypes";
 
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 interface ProductStoreState {
   products: Product[];
   loading: boolean;
@@ -35,7 +37,7 @@ export const ProductStore = create<ProductStoreState>((set) => ({
   fetchProducts: async (page: number, status?: string, search?: string) => {
     set({ loading: true, error: null });
     try {
-      const url = new URL("http://localhost:3001/api/products");
+      const url = new URL(`${baseUrl}api/products`);
       url.searchParams.append("page", page.toString());
       url.searchParams.append("pageSize", "6");
 
@@ -68,12 +70,9 @@ export const ProductStore = create<ProductStoreState>((set) => ({
 
   deleteProduct: async (productId: string) => {
     try {
-      const response = await fetch(
-        `http://localhost:3001/api/products/${productId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${baseUrl}api/products/${productId}`, {
+        method: "DELETE",
+      });
 
       if (response.ok) {
         set((state) => ({
