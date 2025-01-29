@@ -28,11 +28,14 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
         });
 
         if (!response.ok) {
+          console.log(response);
+
           throw new Error("Failed to upload image");
         }
 
         const data = await response.json();
         if (data.imageUrl) {
+          console.log("Uploaded Image URL:", data.imageUrl); // ✅ Log the returned URL
           onImageUpload(data.imageUrl);
         }
       } catch (error) {

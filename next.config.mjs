@@ -4,10 +4,9 @@ export default {
   images: {
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "8080",
-        pathname: "/**",
+        protocol: "https", // using https here
+        hostname: "newproject-448220.ew.r.appspot.com",
+        pathname: "/**", // to allow any path
       },
     ],
   },

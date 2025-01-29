@@ -20,6 +20,8 @@ export const AuthStore = create<AuthState>((set) => {
 
     login: async (name: string, password: string) => {
       try {
+        console.log(baseUrl);
+
         const res = await fetch(`${baseUrl}auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },

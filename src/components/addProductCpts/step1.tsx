@@ -73,7 +73,6 @@ const Step1: React.FC<Step1Props> = ({
           Please fill out all fields
         </div>
       ) : null}
-      .
       <div className="grid grid-cols-2 gap-6">
         <ImageUpload onImageUpload={handleImageUpload} />
         <div className="space-y-4">
