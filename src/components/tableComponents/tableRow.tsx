@@ -11,7 +11,7 @@ const TableRow = ({ product, handleDeleteClick }) => (
       <Image
         width={60}
         height={60}
-        src={`${baseUrl}${product.imageUrl}` || "http://localhost:8080/images"}
+        src={`${product.imageUrl}` || "http://localhost:8080/images"}
         alt={product.name}
         priority={true}
         className=" h-auto w-auto"
