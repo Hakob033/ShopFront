@@ -4,7 +4,6 @@ import Delete from "../../app/icons/delete";
 import Link from "next/link";
 import Image from "next/image";
 
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 const TableRow = ({ product, handleDeleteClick }) => (
   <tr className="border-b">
     <td className="px-3 py-3">

@@ -23,26 +23,26 @@ const AddProduct = () => {
 
   const router = useRouter();
 
-  // const validateSku = async (sku: string): Promise<boolean> => {
-  //   try {
-  //     const response = await fetch(`${baseUrl}api/skuCheck`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ sku }),
-  //     });
+  const validateSku = async (sku: string): Promise<boolean> => {
+    try {
+      const response = await fetch(`${baseUrl}api/skuCheck`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ sku }),
+      });
 
-  //     if (!response.ok) {
-  //       return false;
-  //     }
+      if (!response.ok) {
+        return false;
+      }
 
-  //     return true; // SKU is available
-  //   } catch (error) {
-  //     console.error("Error validating SKU:", error);
-  //     return false;
-  //   }
-  // };
+      return true; // SKU is available
+    } catch (error) {
+      console.error("Error validating SKU:", error);
+      return false;
+    }
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -96,7 +96,7 @@ const AddProduct = () => {
             onChange={handleInputChange}
             onNext={handleNext}
             onCancel={handleCancel}
-            // onValidate={validateSku}
+            onValidate={validateSku}
             onSkuCheck={setSkuCheck} // Passing correctly
             skuCheck={skuCheck} // Passing skuCheck as a prop
           />

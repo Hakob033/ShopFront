@@ -18,32 +18,25 @@ export default function Register() {
   const [passwordError, setPasswordError] = useState("");
   const router = useRouter();
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
-  // const checkUsernameAvailability = async (name: string): Promise<boolean> => {
-  //   try {
-  //     const response = await fetch("http://localhost:8080/auth/check", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ name }),
-  //     });
+  const checkUsernameAvailability = async (name: string): Promise<boolean> => {
+    try {
+      const response = await fetch(`${baseUrl}auth/check`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name }),
+      });
 
-  //     if (response.ok) {
-  //       return true; // Username is available
-  //     }
-
-  //     const errorData = await response.json();
-  //     return false; // Username is taken
-  //   } catch (error) {
-  //     console.error("Error checking username:");
-  //     return false;
-  //   }
-  // };
+      return response.ok;
+    } catch (error) {
+      console.error("Error checking username:", error);
+      return false;
+    }
+  };
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () =>
@@ -51,7 +44,6 @@ export default function Register() {
 
   useEffect(() => {
     const jwtToken = localStorage.getItem("jwtToken");
-
     if (jwtToken) {
       router.push("/");
     } else {
@@ -63,48 +55,30 @@ export default function Register() {
     return <Loading />;
   }
 
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    nextField:
-      | React.RefObject<HTMLInputElement>
-      | React.RefObject<HTMLButtonElement>
-      | null
-  ) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (nextField) {
-        nextField.current?.focus();
-      } else {
-        submitRef.current?.click();
-      }
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate password length
     if (password.length < 8) {
       setPasswordError("Password must be at least 8 characters long.");
       return;
     } else {
-      setPasswordError(""); // Clear the error message
+      setPasswordError("");
     }
 
     if (!name || !password || confirmPasswordValue !== password) {
       return;
     }
 
-    // const isAvailable = await checkUsernameAvailability(name);
+    const isAvailable = await checkUsernameAvailability(name);
 
-    // if (!isAvailable) {
-    //   return;
-    // }
+    if (!isAvailable) {
+      setIsTaken(true);
+      return;
+    } else {
+      setIsTaken(false);
+    }
 
-    const userData = {
-      name,
-      password,
-    };
+    const userData = { name, password };
 
     try {
       const response = await fetch(`${baseUrl}auth/register`, {
@@ -135,33 +109,18 @@ export default function Register() {
         </h2>
         <form className="mt-4" onSubmit={handleSubmit}>
           <div className="mb-4">
-            <span>
-              {isTaken ? (
-                <div className=" text-center text-sm text-red">
-                  Username is taken
-                </div>
-              ) : (
-                <div></div>
-              )}
-            </span>
+            {isTaken && (
+              <div className="text-center text-sm text-red">
+                Username is taken
+              </div>
+            )}
             <input
               type="text"
               id="name"
               className="w-full px-4 py-2 mt-1 text-gray-700 border border-dark rounded-xl outline-none"
               placeholder="Name"
               value={name}
-              onChange={async (e) => {
-                setname(e.target.value);
-                if (e.target.value) {
-                  // const isAvailable = await checkUsernameAvailability(
-                  //   e.target.value
-                  // );
-                  setIsTaken(false);
-                  // if (!isAvailable) {
-                  //   setIsTaken(true);
-                  // }
-                }
-              }}
+              onChange={(e) => setname(e.target.value)}
             />
           </div>
 
@@ -170,16 +129,15 @@ export default function Register() {
               {passwordError}
             </div>
           )}
+
           <div className="mb-4 relative">
             <input
               type={showPassword ? "text" : "password"}
               id="password"
-              ref={passwordRef}
               className="w-full px-4 py-2 mt-1 text-gray-700 border border-dark rounded-xl outline-none"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => handleKeyDown(e, confirmPasswordRef)}
             />
             <span
               className="absolute inset-y-0 right-3 text-xs flex items-center text-dark cursor-pointer transition-colors"
@@ -193,12 +151,10 @@ export default function Register() {
             <input
               type={confirmPassword ? "text" : "password"}
               id="confirm-password"
-              ref={confirmPasswordRef}
               className="w-full px-4 py-2 mt-1 text-gray-700 border border-dark rounded-xl outline-none"
               placeholder="Confirm Password"
               value={confirmPasswordValue}
               onChange={(e) => setConfirmPasswordValue(e.target.value)}
-              onKeyDown={(e) => handleKeyDown(e, submitRef)}
             />
             <span
               className="absolute inset-y-0 right-3 text-xs flex items-center text-dark cursor-pointer transition-colors"

@@ -37,7 +37,8 @@ const Step1: React.FC<Step1Props> = ({
     } as React.ChangeEvent<HTMLInputElement>);
   };
 
-  const [validation, setValidaton] = useState(false);
+  const [validation, setValidation] = useState(false);
+
   const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (value === "" || (Number(value) >= 0 && !value.startsWith("-"))) {
@@ -49,18 +50,16 @@ const Step1: React.FC<Step1Props> = ({
     // Check if all fields are filled
     const { name, sku, category, price, stockQuantity, imageUrl } = formData;
     if (!name || !sku || !category || !price || !stockQuantity || !imageUrl) {
-      setValidaton(true);
+      setValidation(true);
       return;
     }
-    setValidaton(false);
+    setValidation(false);
 
+    // Check SKU availability
     if (onValidate) {
-      const isSkuValid = await onValidate(formData.sku);
-      if (!isSkuValid) {
-        onSkuCheck(true); // Set error
-        return;
-      }
-      onSkuCheck(false); // Clear error
+      const isSkuValid = await onValidate(sku);
+      onSkuCheck(!isSkuValid);
+      if (!isSkuValid) return;
     }
 
     onNext();
@@ -68,11 +67,11 @@ const Step1: React.FC<Step1Props> = ({
 
   return (
     <div>
-      {validation ? (
-        <div className=" text-red text-sm text-center">
+      {validation && (
+        <div className="text-red text-sm text-center">
           Please fill out all fields
         </div>
-      ) : null}
+      )}
       <div className="grid grid-cols-2 gap-6">
         <ImageUpload onImageUpload={handleImageUpload} />
         <div className="space-y-4">
@@ -84,7 +83,6 @@ const Step1: React.FC<Step1Props> = ({
             onChange={onChange}
             className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-medium"
           />
-          {skuCheck && <div>SKU is taken</div>} {/* Error display */}
           <input
             type="text"
             name="sku"
@@ -93,6 +91,9 @@ const Step1: React.FC<Step1Props> = ({
             onChange={onChange}
             className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-medium"
           />
+          {skuCheck && (
+            <div className="text-red text-sm">SKU is already taken</div>
+          )}
           <select
             name="category"
             value={formData.category}

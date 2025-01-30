@@ -78,7 +78,7 @@ const Step1: React.FC<Step1Props> = ({
             width={260}
             src={
               formData.imageUrl
-                ? `${baseUrl}${formData.imageUrl}`
+                ? `${formData.imageUrl}`
                 : "http://localhost:8080/images"
             }
             className="h-full w-full object-cover"
